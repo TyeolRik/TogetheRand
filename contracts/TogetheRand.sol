@@ -16,9 +16,10 @@ contract TogetheRand {
     event BLOCK_NUMBERS(uint256[] blockNumbers);
     event PERSONAL_INPUTS(bytes32[12] personalInput);
     event CHECK_IF(bool value);
-    event SHOW_KECCAK256(bytes32 keccak256_results);
+    event SHOW_KECCAK256_OF_BLOCK(uint blockNumber, bytes32 keccak256_results);
     event SHOW_PART1(bytes4[8] part1);
     event SHOW_PART2(bytes4[8] part2);
+    event SHOW_BEFORE_OUTPUTs(bytes4[] outputs);
     event SHOW_OUTPUTs(bytes4[] outputs);
 
     // About WELL512
@@ -160,7 +161,7 @@ contract TogetheRand {
             // 1. Using Hash function (keccak256) from all XOR-ed User input
             for(uint8 i = 0; i < blockNumbers.length; i++) {
                 blocks[blockNumbers[i]].blockKeccak = keccak256(abi.encode(blocks[blockNumbers[i]].blockKeccak));
-                //emit SHOW_KECCAK256(blocks[blockNumbers[i]].blockKeccak);
+                emit SHOW_KECCAK256_OF_BLOCK(uint(i), blocks[blockNumbers[i]].blockKeccak);
             }
 
             // 2. Do WELL512a
@@ -183,8 +184,8 @@ contract TogetheRand {
                 part2 = __XOR_bytes4arr_bytes4arr(part2, __Bytes32ToBytes4_8array(blocks[blockNumbers[blockIndex]].blockKeccak));
             }
 
-            //emit SHOW_PART1(part1);
-            //emit SHOW_PART2(part2);
+            emit SHOW_PART1(part1);
+            emit SHOW_PART2(part2);
             
             well512a = WELL512a(
                 [part1[0], part1[1], part1[2], part1[3], part1[4], part1[5], part1[6], part1[7], part2[0], part2[1], part2[2], part2[3], part2[4], part2[5], part2[6], part2[7]],   // state(=seed)
@@ -199,6 +200,8 @@ contract TogetheRand {
             for(uint8 i = 0; i < globalOrderCounter; i++) {
                 outputRandomNumbers[i] = nextWELL512a();
             }
+            emit SHOW_BEFORE_OUTPUTs(outputRandomNumbers);
+
             // Shuffle using Fisher–Yates shuffle and WELL512a
             bytes4 temp;
             for(uint8 i = globalOrderCounter - 1; i > 0; i--) {
@@ -227,7 +230,7 @@ contract TogetheRand {
         // 1. Using Hash function (keccak256) from all XOR-ed User input
         for(uint8 i = 0; i < blockNumbers.length; i++) {
             blocks[blockNumbers[i]].blockKeccak = keccak256(abi.encode(blocks[blockNumbers[i]].blockKeccak));
-            emit SHOW_KECCAK256(blocks[blockNumbers[i]].blockKeccak);
+            emit SHOW_KECCAK256_OF_BLOCK(uint(i), blocks[blockNumbers[i]].blockKeccak);
         }
     }
 
