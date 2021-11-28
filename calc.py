@@ -1,6 +1,13 @@
 from web3 import Web3
 import json
 
+def printArray(input):
+    print("{", end='')
+    for i in range(len(input)-1):
+        print("0x%X, " % input[i], end='')
+    print("0x%X}" % input[len(input)-1])
+
+
 def padding_hex_to_bytes32(input):
     if(input[:2] == "0x"):
         input = input[2:]
@@ -9,19 +16,21 @@ def padding_hex_to_bytes32(input):
     return '0x'+input
 
 inputs = [
-        0x11,
-        0x22,
-        0x33,
-        0x44,
-        0x55,
-        0x66,
-        0x77,
-        0x88,
-        0x99,
-        0xAA,
-        0xBB,
-        0xCC,
+        0x12,
+        0x34,
+        0x56,
+        0x78,
+        0x9A,
+        0xBC,
+        0xDE,
+        0xF1,
+        0x23,
+        0x45,
+        0x67,
+        0x89,
 ]
+
+printArray(inputs)
 
 block_inputs = []
 for i in range(0, len(inputs), 2):
@@ -34,6 +43,8 @@ for i in range(len(block_inputs)):
     block_inputs_keccak.append(int("0x" + Web3.solidityKeccak(['bytes32'], [padded]).hex().upper()[2:], 16))
     print(str(i) + "\t" + "0x%X" % block_inputs[i] + "\t\t" + "0x%X" % block_inputs_keccak[i])
 
+print("Keccak256 = ", end='')
+printArray(block_inputs_keccak)
 
 part1 = 0
 part2 = 0
@@ -61,3 +72,4 @@ for x in well512:
     well512_str.append("0x%X" % x)
 
 print("Returns\t" + json.dumps(well512_str))
+printArray(well512)
