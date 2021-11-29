@@ -1,4 +1,5 @@
 // npm install --save-dev @openzeppelin/test-helpers
+// truffle test --show-events
 const { time } = require("@openzeppelin/test-helpers");
 
 const TogetheRand = artifacts.require("TogetheRand")

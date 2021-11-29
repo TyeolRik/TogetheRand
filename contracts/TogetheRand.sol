@@ -20,7 +20,7 @@ contract TogetheRand {
     event SHOW_PART1(bytes4[8] part1);
     event SHOW_PART2(bytes4[8] part2);
     event SHOW_BEFORE_OUTPUTs(bytes4[] outputs);
-    event SHOW_OUTPUTs(bytes4[] outputs);
+    event SHOW_AFTER_SHUFFLE(bytes4[] outputs);
 
     // About WELL512
     struct WELL512a {
@@ -211,7 +211,7 @@ contract TogetheRand {
                 outputRandomNumbers[i] = outputRandomNumbers[j];
                 outputRandomNumbers[j] = temp;
             }
-            emit SHOW_OUTPUTs(outputRandomNumbers);
+            emit SHOW_AFTER_SHUFFLE(outputRandomNumbers);
             uint8 tempIndex = 0;
             for(uint8 blockIndex = 0; blockIndex < blockNumbers.length; blockIndex++) {
                 for(uint8 participantIndex = 0; participantIndex < blocks[blockNumbers[blockIndex]].participants.length; participantIndex++) {
@@ -242,5 +242,6 @@ contract TogetheRand {
                 }
             }
         }
+        return 0xFFFFFFFF;      // If not found.
     }
 }
